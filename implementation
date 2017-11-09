@@ -1,42 +1,88 @@
-//把一个数组一分为二，左边用于入队，右边用于出队
-
-
-class QueueWithTwoStacks{
-    private doublle []data;
-    private int top1,top2;
+class Stack{
+    double []m_dData;
+    int N;
     
-    public QueueWithTwoStacks(){
-        data=new double [1];
-        top1=top2=0;
+    public Stack(){
+         m_dData=new double[1];
+         N=0;
     }
     
     
     public boolean isEmpty(){
-        return top1==top2;
+        return N==0;
     }
     
     
-    public double dequeue(){
-         if(isEmpty()){
-            top1=top2=data.length/2;//每次发现队列为空，设置top1，top2在中间，防止数组最终挤在一端
-            throws new IllegalArgumentException("Dequeuing an empty queue!");
-         }
-         double item=data[top2];
-         data[top2--]=null;
-         if(top2-top1==data.length/4)  resize(data.length/2);
-         return item;
+    public double pop(){
+        if(isEmpty())
+            throws new IllegalArgumentException("poping an empty stack!");
+        double item=m_dData[--N];
+        m_dData[N]=null;
+        if(N>0&&N==m_dData.length/4)  resize(m_dData.length/2);
+        return item;
     }
     
     
-    public double enqueue(double item){
-        if(top1==-1)  resize(data.length*2);
-        data[top1--]=item;
+    public double push(double date){
+          if(N==m_dData.length)   resize(2*N);
+          m_dData.length[N]=data;
     }
-
-    public resize(int capability){
-        double []copy=new[capability];
-        for(int i=0;i<top2-top1;i++)
-            copy[capability/4+i]=data[top1+i+1];
-        data=copy;
+    
+    
+    private void resize(int size){
+        double copy[]=new double [size];
+        for(int i=0;i<N;i++)   copy[i]= m_dData[i];
+        m_dData=copy;
+    }
+    
+    
+    public double topItem(){
+        if(isEmpty())
+            throws new IllegalArgumentException("poping an empty stack!");
+        int n=N;
+        return m_dData[--n];
     }
 }
+
+
+//用两个堆栈实现队列
+//可以想到到的一种方法是，入队时，把元素放堆栈S1，出队时，把所有元素倒到堆栈S2中，再在S2中pop
+//这里有一个细节：可以让方案更好，入队时就把元素放到S1，出队时，看看S2是否为空，不为空就pop，为空再把S1中所有元素倒入S1；
+
+
+class Queue_with_two_stacks{
+    private Stack s1;
+    private Stack s2;
+    
+    public Queue_with_two_stacks(){
+        s1=new Stack();
+        s1=new Stack();
+    }
+    
+    
+    public void enqueue(double data){
+        s1.push(data);        
+    }
+    
+    
+    public double dequeue(double data){
+        if(!s2.isEmpty())
+            return s2.pop();        
+        while(!s1.isEmpty()){
+            double item=s1.pop();
+            s2.push(item);
+        }
+        return s2.pop();
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
